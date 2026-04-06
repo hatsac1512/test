@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Global Health Action — Make a Donation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--dark:#0b1c17;--dark2:#112219;--dark3:#172e22;--teal:#1cb898;--tealt:#2ed4b2;--tealx:rgba(28,184,152,0.15);--cream:#f4f0e8;--creaml:#faf8f4;--white:#fff;--muted:#7a9e93;--mutedl:#a8c4bc;--border:rgba(255,255,255,0.07);--borderl:#dde8e4;--text:#0b1c17;--textb:#3d5e56;--red:#e74c3c;--green:#27ae60}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--creaml);color:var(--text);overflow-x:hidden}
+nav{position:fixed;top:0;left:0;right:0;z-index:200;background:var(--dark);display:flex;align-items:center;justify-content:space-between;padding:0 56px;height:66px;border-bottom:1px solid var(--border)}
+.logo{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--white);cursor:pointer}.logo span{color:var(--teal)}
+.nav-cta{background:var(--teal);color:var(--dark);padding:9px 22px;border-radius:5px;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;border:none;font-family:'Outfit',sans-serif;transition:all .2s}
+.nav-cta:hover{background:var(--tealt);transform:translateY(-1px)}
+.dpwrap{min-height:100vh;padding:120px 56px 80px;background:var(--creaml)}
+.dpinner{max-width:600px;margin:0 auto;width:100%}
+.dcard{background:var(--white);border-radius:12px;padding:44px 42px;box-shadow:0 2px 12px rgba(0,0,0,0.08)}
+.dt{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:700;color:var(--text);margin-bottom:8px}
+.ds{font-size:14px;color:var(--muted);margin-bottom:28px}
+.step-indicator{display:flex;justify-content:space-between;margin-bottom:32px;gap:12px}
+.step-dot{width:36px;height:36px;border-radius:50%;background:var(--borderl);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--muted);transition:all .3s}
+.step-dot.active{background:var(--teal);color:var(--white)}
+.step-dot.completed{background:var(--green);color:var(--white)}
+.step-label{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:6px;text-align:center;display:block}
+.step-section{display:none}
+.step-section.active{display:block;animation:fadeIn .3s ease}
+@keyframes fadeIn{from{opacity:.8;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.div{height:1px;background:var(--borderl);margin:24px 0}
+.fg{margin-bottom:16px}
+.fg label{display:block;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text);margin-bottom:6px}
+.fi,.select{width:100%;padding:12px 14px;border:1px solid var(--borderl);border-radius:6px;font-size:13px;font-family:'Outfit',sans-serif;background:var(--white);color:var(--text);transition:all .2s}
+.fi:focus,.select:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px var(--tealx)}
+.fi.error{border-color:var(--red);background:rgba(231,76,60,0.05)}
+.error-msg{font-size:11px;color:var(--red);margin-top:4px;display:none}
+.error-msg.show{display:block}
+.fg2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.fg2.full{grid-template-columns:1fr}
+.fg.full{grid-column:1/-1}
+.tab-row{display:flex;gap:12px;margin-bottom:20px}
+.tbtn{background:var(--borderl);color:var(--text);padding:12px 20px;border-radius:6px;font-size:12px;font-weight:600;border:none;cursor:pointer;transition:all .2s}
+.tbtn.active{background:var(--teal);color:var(--white)}
+.tbtn:hover{background:var(--tealt);color:var(--white)}
+.amts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+.amt{background:var(--borderl);color:var(--text);padding:14px 8px;border-radius:6px;font-size:12px;font-weight:600;border:none;cursor:pointer;transition:all .2s}
+.amt:hover{background:var(--teal);color:var(--white)}
+.amt.active{background:var(--teal);color:var(--white);border:2px solid var(--dark)}
+.cw{position:relative;margin-bottom:16px}
+.pfx{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:13px;font-weight:600;color:var(--muted)}
+.cw .fi{padding-left:28px}
+.ipill{background:var(--tealx);border:1px solid var(--teal);border-radius:6px;padding:12px 14px;font-size:12px;color:var(--textb);margin-bottom:16px}
+.hn{display:flex;align-items:center;gap:8px;margin-bottom:12px;font-size:13px}
+.hn input[type="checkbox"]{width:16px;height:16px;cursor:pointer;accent-color:var(--teal)}
+.hn label{margin:0;cursor:pointer;font-weight:500}
+.btn-row{display:flex;gap:12px;margin-top:28px}
+.sub,.btn-back,.btn-next{padding:14px 32px;border-radius:6px;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;border:none;font-family:'Outfit',sans-serif;transition:all .2s}
+.sub{background:var(--teal);color:var(--dark);width:100%}
+.sub:hover:not(:disabled){background:var(--tealt);transform:translateY(-2px)}
+.sub:disabled{opacity:.5;cursor:not-allowed}
+.btn-next{background:var(--teal);color:var(--dark);flex:1}
+.btn-next:hover{background:var(--tealt)}
+.btn-back{background:var(--borderl);color:var(--text);flex:1}
+.btn-back:hover{background:var(--mutedl);color:var(--white)}
+.tnote{font-size:11px;color:var(--muted);margin-top:12px;display:flex;align-items:center;gap:6px;text-align:center;justify-content:center}
+.tnote svg{min-width:12px}
+.pirow{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;justify-content:center}
+.pi{font-size:11px;color:var(--muted);padding:4px 10px;border:1px solid var(--borderl);border-radius:100px}
+.review-item{background:var(--creaml);padding:12px 14px;border-radius:6px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
+.review-label{font-size:11px;font-weight:600;text-transform:uppercase;color:var(--muted)}
+.review-value{font-size:13px;font-weight:500;color:var(--text)}
+.review-edit-link{font-size:11px;color:var(--teal);cursor:pointer;font-weight:600;text-decoration:underline}
+.success-container{text-align:center;padding:20px 0}
+.success-icon{font-size:48px;margin-bottom:16px;display:block}
+.success-title{font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--green);margin-bottom:8px}
+.success-text{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:16px}
+.receipt-box{background:var(--creaml);padding:16px;border-radius:6px;margin:20px 0;border-left:4px solid var(--teal)}
+.receipt-row{display:flex;justify-content:space-between;font-size:12px;margin-bottom:8px}
+.receipt-row:last-child{margin-bottom:0}
+.receipt-label{color:var(--muted)}
+.receipt-value{font-weight:600;color:var(--text)}
+.btn-download{background:var(--teal);color:var(--dark);padding:12px 24px;border-radius:6px;font-size:12px;font-weight:700;border:none;cursor:pointer;margin-top:16px}
+.btn-download:hover{background:var(--tealt)}
+footer{background:var(--dark);padding:24px 56px;margin-top:40px}
+.fbot{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--muted)}
+.fbot a{color:var(--teal);cursor:pointer;text-decoration:none}
+.fbot a:hover{text-decoration:underline}
+.back-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);cursor:pointer;margin-bottom:20px;transition:color .2s}
+.back-link:hover{color:var(--text)}
+.validation-icon{display:none;position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:14px}
+.fi.valid{padding-right:36px;border-color:var(--green)}
+.fi.valid ~ .validation-icon{display:block;color:var(--green)}
+.fg{position:relative}
+</style>
+</head>
+<body>
+
+<nav>
+<div class="logo">Global Health <span>Action</span></div>
+<button class="nav-cta" onclick="window.location.href='#'">Back to Home</button>
+</nav>
+
+<div class="dpwrap">
+<div class="dpinner">
+
+<!-- Step Indicator -->
+<div class="step-indicator" style="margin-bottom:40px">
+<div class="step-dot active" id="dot1"><span>1</span><span class="step-label">Amount</span></div>
+<div class="step-dot" id="dot2"><span>2</span><span class="step-label">Info</span></div>
+<div class="step-dot" id="dot3"><span>3</span><span class="step-label">Payment</span></div>
+<div class="step-dot" id="dot4"><span>4</span><span class="step-label">Review</span></div>
+<div class="step-dot" id="dot5"><span>5</span><span class="step-label">Done</span></div>
+</div>
+
+<div class="dcard">
+
+<!-- STEP 1: Amount & Frequency -->
+<div class="step-section active" id="step1">
+<h2 class="dt">Choose Amount & Frequency</h2>
+<p class="ds">Your donation supports health workers and programs saving lives.</p>
+
+<div class="tab-row">
+<button class="tbtn active" onclick="setFrequency('monthly')">Give Monthly</button>
+<button class="tbtn" onclick="setFrequency('onetime')">Give Once</button>
+</div>
+
+<div class="amts">
+<button class="amt" onclick="setAmount(this, 25)">$25</button>
+<button class="amt active" onclick="setAmount(this, 50)">$50</button>
+<button class="amt" onclick="setAmount(this, 100)">$100</button>
+<button class="amt" onclick="setAmount(this, 250)">$250</button>
+<button class="amt" onclick="setAmount(this, 500)">$500</button>
+<button class="amt" onclick="setAmount(this, 1000)">$1K</button>
+</div>
+
+<div class="cw">
+<span class="pfx">$</span>
+<input class="fi" type="number" id="customAmt" placeholder="Custom amount" oninput="setCustomAmount()">
+</div>
+
+<div class="ipill" id="impactMsg">Your <strong>$50/month</strong> trains a community health worker for 8 months of service.</div>
+
+<div class="btn-row" style="margin-top:32px">
+<button class="btn-next" onclick="goToStep(2)">Next: Your Information →</button>
+</div>
+</div>
+
+<!-- STEP 2: Personal Information -->
+<div class="step-section" id="step2">
+<h2 class="dt">Your Information</h2>
+<p class="ds">We need this to process your donation and send a tax receipt.</p>
+
+<div class="fg2">
+<div class="fg">
+<label>First Name *</label>
+<input class="fi" type="text" id="firstName" placeholder="First name" onblur="validateField(this, 'name')">
+<div class="error-msg"></div>
+</div>
+<div class="fg">
+<label>Last Name *</label>
+<input class="fi" type="text" id="lastName" placeholder="Last name" onblur="validateField(this, 'name')">
+<div class="error-msg"></div>
+</div>
+</div>
+
+<div class="fg full">
+<label>Email Address *</label>
+<input class="fi" type="email" id="email" placeholder="name@email.com" onblur="validateField(this, 'email')">
+<div class="error-msg"></div>
+</div>
+
+<div class="fg full">
+<label>Phone Number *</label>
+<input class="fi" type="tel" id="phone" placeholder="+1 (555) 123-4567" onblur="validateField(this, 'phone')">
+<div class="error-msg"></div>
+</div>
+
+<div class="fg full">
+<label>Country *</label>
+<select class="select" id="country" onchange="validateField(this, 'country')">
+<option value="">Select country</option>
+<option>United States</option>
+<option>Kenya</option>
+<option>United Kingdom</option>
+<option>Canada</option>
+<option>Australia</option>
+<option>Haiti</option>
+<option>Nigeria</option>
+<option>South Africa</option>
+<option>Ghana</option>
+<option>Other</option>
+</select>
+<div class="error-msg"></div>
+</div>
+
+<div class="fg full">
+<label>Street Address *</label>
+<input class="fi" type="text" id="address" placeholder="123 Main Street" onblur="validateField(this, 'address')">
+<div class="error-msg"></div>
+</div>
+
+<div class="fg2">
+<div class="fg">
+<label>City *</label>
+<input class="fi" type="text" id="city" placeholder="City" onblur="validateField(this, 'text')">
+<div class="error-msg"></div>
+</div>
+<div class="fg">
+<label>State / Province</label>
+<input class="fi" type="text" id="state" placeholder="State or Province">
+</div>
+</div>
+
+<div class="fg2">
+<div class="fg">
+<label>Postal / ZIP Code</label>
+<input class="fi" type="text" id="zip" placeholder="12345">
+</div>
+<div class="fg"></div>
+</div>
+
+<div class="fg full">
+<label>Designate to a Program (Optional)</label>
+<select class="select" id="program">
+<option value="">General Fund (where needed most)</option>
+<option value="maternal">Maternal & Child Health</option>
+<option value="community">Community Health Workers</option>
+<option value="research">Research & Innovation</option>
+<option value="capacity">Capacity Building & Training</option>
+<option value="other">Other / Not specified</option>
+</select>
+</div>
+
+<div class="hn">
+<input type="checkbox" id="honoree" onchange="toggleHonoree()">
+<label for="honoree">Donate in honor or memory of someone</label>
+</div>
+
+<div id="honoreeSection" style="display:none;margin-bottom:16px">
+<div class="fg2" style="grid-template-columns:1fr 1fr;gap:16px">
+<div class="fg">
+<label>Type *</label>
+<select class="select" id="honoreeType">
+<option value="">Select</option>
+<option value="honor">In Honor Of</option>
+<option value="memory">In Memory Of</option>
+</select>
+</div>
+<div class="fg">
+<label>Their Name *</label>
+<input class="fi" type="text" id="honoreeName" placeholder="Full name">
+</div>
+</div>
+<div class="hn" style="margin-top:8px">
+<input type="checkbox" id="notifyHonoree">
+<label for="notifyHonoree">Notify them about this donation</label>
+</div>
+<div id="notifySection" style="display:none;margin-top:8px">
+<div class="fg">
+<label>Their Email Address *</label>
+<input class="fi" type="email" id="honoreeEmail" placeholder="name@email.com">
+</div>
+</div>
+<script>document.getElementById('notifyHonoree').onchange = function(){ document.getElementById('notifySection').style.display = this.checked ? 'block' : 'none'; }</script>
+</div>
+
+<div class="btn-row">
+<button class="btn-back" onclick="goToStep(1)">← Back</button>
+<button class="btn-next" onclick="goToStep(3)">Next: Payment →</button>
+</div>
+</div>
+
+<!-- STEP 3: Payment Information -->
+<div class="step-section" id="step3">
+<h2 class="dt">Payment Information</h2>
+<p class="ds">Your payment is secured with 256-bit SSL encryption.</p>
+
+<div class="div" style="margin:16px 0"></div>
+
+<div class="fg">
+<label>Card Number *</label>
+<input class="fi" type="text" id="cardNumber" placeholder="0000 0000 0000 0000" maxlength="19" onblur="formatCardNumber(this); validateField(this, 'cardnumber')">
+<div class="error-msg"></div>
+</div>
+
+<div class="fg2">
+<div class="fg">
+<label>Name on Card *</label>
+<input class="fi" type="text" id="cardName" placeholder="Full name" onblur="validateField(this, 'name')">
+<div class="error-msg"></div>
+</div>
+<div class="fg">
+<label>Expiry (MM/YY) *</label>
+<input class="fi" type="text" id="expiry" placeholder="12/25" maxlength="5" onblur="formatExpiry(this); validateField(this, 'expiry')">
+<div class="error-msg"></div>
+</div>
+</div>
+
+<div class="fg" style="max-width:140px">
+<label>CVV *</label>
+<input class="fi" type="text" id="cvv" placeholder="123" maxlength="4" onblur="validateField(this, 'cvv')">
+<div class="error-msg"></div>
+</div>
+
+<div class="tnote">
+<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+256-bit SSL encrypted · Charity Navigator 4-star rated
+</div>
+
+<div class="pirow" style="margin-bottom:20px">
+<span class="pi">G Pay</span>
+<span class="pi">Mastercard</span>
+<span class="pi">VISA</span>
+<span class="pi">Apple Pay</span>
+<span class="pi">PayPal</span>
+</div>
+
+<div class="btn-row">
+<button class="btn-back" onclick="goToStep(2)">← Back</button>
+<button class="btn-next" onclick="goToStep(4)">Review Donation →</button>
+</div>
+</div>
+
+<!-- STEP 4: Review & Confirm -->
+<div class="step-section" id="step4">
+<h2 class="dt">Review Your Donation</h2>
+<p class="ds">Please verify all information is correct before submitting.</p>
+
+<div style="background:var(--tealx);border:1px solid var(--teal);padding:16px;border-radius:6px;margin-bottom:20px">
+<div class="review-item">
+<div><div class="review-label">Amount</div><div class="review-value" id="review-amount">$50/month</div></div>
+<a class="review-edit-link" onclick="goToStep(1)">Edit</a>
+</div>
+<div class="review-item">
+<div><div class="review-label">Program</div><div class="review-value" id="review-program">General Fund</div></div>
+<a class="review-edit-link" onclick="goToStep(2)">Edit</a>
+</div>
+</div>
+
+<div class="div" style="margin:20px 0"></div>
+
+<div style="background:var(--creaml);padding:16px;border-radius:6px;margin-bottom:20px">
+<h3 style="font-size:12px;font-weight:700;text-transform:uppercase;color:var(--text);margin-bottom:12px">Personal Information</h3>
+<div class="review-item">
+<div><div class="review-label">Name</div><div class="review-value" id="review-name">John Doe</div></div>
+<a class="review-edit-link" onclick="goToStep(2)">Edit</a>
+</div>
+<div class="review-item">
+<div><div class="review-label">Email</div><div class="review-value" id="review-email">john@example.com</div></div>
+<a class="review-edit-link" onclick="goToStep(2)">Edit</a>
+</div>
+<div class="review-item">
+<div><div class="review-label">Phone</div><div class="review-value" id="review-phone">+1 (555) 123-4567</div></div>
+<a class="review-edit-link" onclick="goToStep(2)">Edit</a>
+</div>
+<div class="review-item">
+<div><div class="review-label">Address</div><div class="review-value" id="review-address">123 Main St, City, ST 12345</div></div>
+<a class="review-edit-link" onclick="goToStep(2)">Edit</a>
+</div>
+</div>
+
+<div style="background:#f0f8f5;border-left:4px solid var(--teal);padding:14px;border-radius:4px;margin-bottom:20px;font-size:12px;color:var(--textb)">
+<strong>Tax Deduction:</strong> Global Health Action is a registered 501(c)(3) nonprofit. Your donation is tax-deductible to the fullest extent permitted by U.S. law. A receipt will be emailed to your address.
+</div>
+
+<div class="hn" style="margin-bottom:20px">
+<input type="checkbox" id="agreeTerms" onchange="document.getElementById('btn-submit').disabled = !this.checked">
+<label for="agreeTerms">I agree to the Terms & Conditions and Privacy Policy</label>
+</div>
+
+<div id="recaptchaContainer" style="margin-bottom:20px;padding:12px;border:1px solid var(--borderl);border-radius:6px;background:var(--creaml);font-size:11px;color:var(--muted)">
+🔒 reCAPTCHA v3 verification (simulated - in production, integrate with Google reCAPTCHA)
+</div>
+
+<button class="sub" id="btn-submit" onclick="submitDonation()" disabled>Complete Donation</button>
+
+<div class="btn-row" style="margin-top:12px">
+<button class="btn-back" onclick="goToStep(3)" style="width:100%">← Back to Payment</button>
+</div>
+</div>
+
+<!-- STEP 5: Success -->
+<div class="step-section" id="step5">
+<div class="success-container">
+<span class="success-icon">✓</span>
+<h2 class="success-title">Thank You!</h2>
+<p class="success-text">Your donation has been processed successfully.<br>A receipt and impact report will be sent to your email.</p>
+
+<div class="receipt-box">
+<div class="receipt-row">
+<span class="receipt-label">Receipt #:</span>
+<span class="receipt-value" id="receipt-num">GHA-2024-001847</span>
+</div>
+<div class="receipt-row">
+<span class="receipt-label">Amount:</span>
+<span class="receipt-value" id="receipt-amount">$50.00</span>
+</div>
+<div class="receipt-row">
+<span class="receipt-label">Frequency:</span>
+<span class="receipt-value" id="receipt-freq">Monthly</span>
+</div>
+<div class="receipt-row">
+<span class="receipt-label">Program:</span>
+<span class="receipt-value" id="receipt-program">General Fund</span>
+</div>
+<div class="receipt-row">
+<span class="receipt-label">Donor:</span>
+<span class="receipt-value" id="receipt-donor">John Doe</span>
+</div>
+</div>
+
+<button class="btn-download">Download Receipt (PDF)</button>
+
+<p style="font-size:12px;color:var(--muted);margin-top:24px">You'll receive an email confirmation at the address you provided.<br>Check your spam folder if you don't see it within 5 minutes.</p>
+
+<div class="btn-row" style="margin-top:28px">
+<button class="btn-next" style="width:100%;background:var(--green)" onclick="window.location.href='#'">Back to Home</button>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+<footer>
+<div class="fbot">
+<span>© 2026 Global Health Action · EIN 23-7241142</span>
+<span><a onclick="#">Privacy Policy</a> · <a onclick="#">Terms & Conditions</a></span>
+</div>
+</footer>
+
+<script>
+// STATE
+let state = {
+  frequency: 'monthly',
+  amount: 50,
+  firstName: '',
+  lastName: '',
+  email: '',
+  phone: '',
+  country: '',
+  address: '',
+  city: '',
+  state: '',
+  zip: '',
+  program: '',
+  honoreeType: '',
+  honoreeName: '',
+  cardNumber: '',
+  cardName: '',
+  expiry: '',
+  cvv: ''
+};
+
+function setFrequency(freq) {
+  state.frequency = freq;
+  document.querySelectorAll('.tbtn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  updateImpactMessage();
+}
+
+function setAmount(btn, amt) {
+  state.amount = amt;
+  document.querySelectorAll('.amt').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('customAmt').value = '';
+  updateImpactMessage();
+}
+
+function setCustomAmount() {
+  const v = parseFloat(document.getElementById('customAmt').value);
+  if (!isNaN(v) && v > 0) {
+    state.amount = v;
+    document.querySelectorAll('.amt').forEach(b => b.classList.remove('active'));
+    updateImpactMessage();
+  }
+}
+
+function updateImpactMessage() {
+  const sfx = state.frequency === 'monthly' ? '/month' : '';
+  let msg = '';
+  if (state.amount <= 75) msg = `Your <strong>$${state.amount}${sfx}</strong> goes directly to frontline health programs reaching families in need.`;
+  else if (state.amount <= 300) msg = `Your <strong>$${state.amount}${sfx}</strong> trains a community health worker and supports maternal care programs.`;
+  else if (state.amount <= 500) msg = `Your <strong>$${state.amount}${sfx}</strong> funds comprehensive health screenings for 200+ community members.`;
+  else msg = `Your <strong>$${state.amount}${sfx}</strong> launches a new health initiative in an underserved region.`;
+  document.getElementById('impactMsg').innerHTML = msg;
+}
+
+function goToStep(step) {
+  if (step > 1 && !validateStep(step - 1)) {
+    alert('Please complete all required fields before proceeding.');
+    return;
+  }
+  document.querySelectorAll('.step-section').forEach(s => s.classList.remove('active'));
+  document.getElementById('step' + step).classList.add('active');
+  
+  updateStepIndicator(step);
+  if (step === 4) populateReview();
+  if (step === 5) populateSuccess();
+  window.scrollTo(0, 0);
+}
+
+function updateStepIndicator(current) {
+  for (let i = 1; i <= 5; i++) {
+    const dot = document.getElementById('dot' + i);
+    if (i < current) dot.classList.add('completed');
+    else if (i === current) {
+      dot.classList.remove('completed');
+      dot.classList.add('active');
+    } else {
+      dot.classList.remove('active', 'completed');
+    }
+  }
+}
+
+function validateField(el, type) {
+  const value = el.value.trim();
+  const errorEl = el.nextElementSibling;
+  let valid = true;
+  let msg = '';
+  
+  if (type === 'email') {
+    valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+    msg = 'Invalid email address';
+  } else if (type === 'name') {
+    valid = value.length >= 2;
+    msg = 'Name must be at least 2 characters';
+  } else if (type === 'phone') {
+    valid = /^[\d\s\-+()]+$/.test(value) && value.length >= 10;
+    msg = 'Invalid phone number';
+  } else if (type === 'address') {
+    valid = value.length >= 5;
+    msg = 'Please enter a valid address';
+  } else if (type === 'country') {
+    valid = value !== '';
+    msg = 'Please select a country';
+  } else if (type === 'text') {
+    valid = value.length >= 2;
+    msg = 'This field is required';
+  } else if (type === 'cardnumber') {
+    valid = /^\d{4}\s\d{4}\s\d{4}\s\d{4}$/.test(value);
+    msg = 'Invalid card number';
+  } else if (type === 'expiry') {
+    valid = /^\d{2}\/\d{2}$/.test(value);
+    msg = 'Invalid expiry (MM/YY)';
+  } else if (type === 'cvv') {
+    valid = /^\d{3,4}$/.test(value);
+    msg = 'Invalid CVV';
+  }
+  
+  if (valid) {
+    el.classList.add('valid');
+    el.classList.remove('error');
+    if (errorEl && errorEl.classList.contains('error-msg')) errorEl.classList.remove('show');
+  } else {
+    el.classList.remove('valid');
+    el.classList.add('error');
+    if (errorEl && errorEl.classList.contains('error-msg')) {
+      errorEl.textContent = msg;
+      errorEl.classList.add('show');
+    }
+  }
+  
+  return valid;
+}
+
+function validateStep(step) {
+  if (step === 1) return true;
+  if (step === 2) {
+    let valid = true;
+    valid &= validateField(document.getElementById('firstName'), 'name');
+    valid &= validateField(document.getElementById('lastName'), 'name');
+    valid &= validateField(document.getElementById('email'), 'email');
+    valid &= validateField(document.getElementById('phone'), 'phone');
+    valid &= validateField(document.getElementById('country'), 'country');
+    valid &= validateField(document.getElementById('address'), 'address');
+    valid &= validateField(document.getElementById('city'), 'text');
+    state.firstName = document.getElementById('firstName').value;
+    state.lastName = document.getElementById('lastName').value;
+    state.email = document.getElementById('email').value;
+    state.phone = document.getElementById('phone').value;
+    state.country = document.getElementById('country').value;
+    state.address = document.getElementById('address').value;
+    state.city = document.getElementById('city').value;
+    state.state = document.getElementById('state').value;
+    state.zip = document.getElementById('zip').value;
+    state.program = document.getElementById('program').value || 'General Fund';
+    return valid;
+  }
+  if (step === 3) {
+    let valid = true;
+    valid &= validateField(document.getElementById('cardNumber'), 'cardnumber');
+    valid &= validateField(document.getElementById('cardName'), 'name');
+    valid &= validateField(document.getElementById('expiry'), 'expiry');
+    valid &= validateField(document.getElementById('cvv'), 'cvv');
+    state.cardNumber = document.getElementById('cardNumber').value;
+    state.cardName = document.getElementById('cardName').value;
+    state.expiry = document.getElementById('expiry').value;
+    state.cvv = document.getElementById('cvv').value;
+    return valid;
+  }
+  return true;
+}
+
+function formatCardNumber(el) {
+  let v = el.value.replace(/\s/g, '');
+  if (v.length <= 16) {
+    el.value = v.match(/.{1,4}/g)?.join(' ') || v;
+  }
+}
+
+function formatExpiry(el) {
+  let v = el.value.replace(/\D/g, '');
+  if (v.length >= 2) {
+    el.value = v.slice(0, 2) + '/' + v.slice(2, 4);
+  }
+}
+
+function toggleHonoree() {
+  document.getElementById('honoreeSection').style.display = document.getElementById('honoree').checked ? 'block' : 'none';
+}
+
+function populateReview() {
+  const amtStr = state.amount >= 1000 ? `$${(state.amount/1000).toFixed(1)}K` : `$${state.amount}`;
+  document.getElementById('review-amount').textContent = amtStr + (state.frequency === 'monthly' ? '/month' : '');
+  document.getElementById('review-program').textContent = state.program || 'General Fund';
+  document.getElementById('review-name').textContent = state.firstName + ' ' + state.lastName;
+  document.getElementById('review-email').textContent = state.email;
+  document.getElementById('review-phone').textContent = state.phone;
+  document.getElementById('review-address').textContent = state.address + (state.state ? ', ' + state.state : '') + (state.zip ? ' ' + state.zip : '');
+}
+
+function populateSuccess() {
+  const amtStr = state.amount >= 1000 ? `$${(state.amount/1000).toFixed(1)}K` : `$${state.amount}`;
+  document.getElementById('receipt-amount').textContent = amtStr;
+  document.getElementById('receipt-freq').textContent = state.frequency === 'monthly' ? 'Monthly' : 'One-time';
+  document.getElementById('receipt-program').textContent = state.program || 'General Fund';
+  document.getElementById('receipt-donor').textContent = state.firstName + ' ' + state.lastName;
+}
+
+function submitDonation() {
+  if (!document.getElementById('agreeTerms').checked) {
+    alert('Please agree to Terms & Conditions');
+    return;
+  }
+  goToStep(5);
+}
+
+updateImpactMessage();
+</script>
+
+</body>
+</html>
